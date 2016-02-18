@@ -93,6 +93,8 @@ private:
 		SmartDashboard::PutString("MOTORFL", profile->getValue("MOTORFL"));
 		SmartDashboard::PutString("State", "Robot Init");
 		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+		CameraServer::GetInstance()->StartAutomaticCapture("cam1");
+
 		nLNode* test = master->head;
 		while (test != NULL) {
 			test->value->RobotInit();
@@ -112,7 +114,7 @@ private:
 
 	void AutonomousPeriodic() {
 		SmartDashboard::PutString("State", "Autonomous Periodic");
-		//No list here beacause auto was always a bit more complicated
+		//No list here bacause auto was always a bit more complicated
 
 		int x = 0;
 		if (robot.compare("ORYX") == 0) {
