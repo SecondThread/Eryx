@@ -18,8 +18,10 @@ public:
 	RelayController();
 	virtual ~RelayController();
 
+	void RobotInit();
 	void TeleopInit();
 	void TeleopPeriodic();
+	void DisabledPeriodic();
 
 protected:
 	enum  RelayColor{

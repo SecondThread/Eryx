@@ -14,8 +14,8 @@ const int RELAY_BLUE = 0;
 
 RelayController::RelayController() {
 	// TODO Auto-generated constructor stub
-	Red = new Relay(RelayIO::RELAY_RED);
-	Blue = new Relay(RelayIO::RELAY_BLUE);
+	Red = new Relay(RelayIO::RELAY_RED, Relay::kForwardOnly);
+	Blue = new Relay(RelayIO::RELAY_BLUE), Relay::kForwardOnly;
 }
 
 RelayController::~RelayController() {
@@ -63,10 +63,28 @@ void RelayController::stopBlink() {
 
 }
 
-void RelayController::TeleopInit()
-{
+void RelayController::RobotInit(){
 	SmartDashboard::PutNumber("LED", 0);
 	setColor(RelayColor::blue);
+}
+
+void RelayController::DisabledPeriodic()
+{
+	int x = SmartDashboard::GetNumber("LED", 0);
+	RelayColor test;
+
+	if(x == 0)test = RelayColor::blue;
+	else if(x == 1)test = RelayColor::red;
+
+	if (currnet != test)
+	{
+		setColor(test);
+	}
+}
+
+void RelayController::TeleopInit()
+{
+
 }
 
 void RelayController::TeleopPeriodic()

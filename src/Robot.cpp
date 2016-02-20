@@ -19,6 +19,7 @@
 #include "noList.cpp"
 #include "Shooter/Shooter.h"
 #include "Camera/DynamicCameraServer.h"
+#include "Components/RelayController.h"
 
 
 class Robot: public IterativeRobot {
@@ -34,6 +35,7 @@ public:
 	Drive *drive;
 	Arm *arm;
 	CommandListMaker *clMaker;
+	RelayController* rc;
 	bool DEBUG = false;
 
 	Shooter *shooter;
@@ -53,8 +55,9 @@ public:
 
 
 		if (robot.compare("PROTO") == 0) {
+			rc = new RelayController();
 
-			master->addNode(new DynamicCameraServer(xbox), "camera");
+			master->addNode(rc, "LED");
 
 		} else if (robot.compare("TIM") == 0) {
 
@@ -105,6 +108,16 @@ private:
 			test = test->parent;
 		}
 
+	}
+
+	void DisabledPeriodic()
+	{
+		SmartDashboard::PutString("State", "Disabled Periodic");
+				nLNode* test = master->head;
+				while (test != NULL) {
+					test->value->DisabledPeriodic();
+					test = test->parent;
+				}
 	}
 
 	void AutonomousInit() {
