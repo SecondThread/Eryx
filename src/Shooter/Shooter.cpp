@@ -244,8 +244,8 @@ void Shooter::setPnumatics() {
 void Shooter::updateMotor2() {
 	//float appliedSpeed = SmartDashboard::GetNumber("ShooterSpeed", 1.0);
 	if (runShoot) {
-		leftSpeed = acceleration(1.0, leftSpeed);
-		rightSpeed = acceleration(1.0, rightSpeed);
+		leftSpeed = acceleration(0.5, leftSpeed);
+		rightSpeed = acceleration(0.5, rightSpeed);
 	} else {
 		leftSpeed = 0.0;
 		rightSpeed = 0.0;
@@ -255,7 +255,7 @@ void Shooter::updateMotor2() {
 		intakeSpeed = -0.9;
 	} else {
 		intakeSpeed = 0.0;
-	}
+	}//i am a fake coder hahahahahh chuck me out the window jk
 }
 
 float Shooter::acceleration(float newS, float oldS) {
