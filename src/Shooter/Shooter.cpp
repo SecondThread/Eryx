@@ -206,7 +206,7 @@ void Shooter::readXbox() {
 		runShoot = !runShoot;
 	}
 
-	if (xbox->getRightTriggerPressed()) { //Toggle trigger
+	if (xbox->getLeftTriggerPressed()) { //Toggle trigger
 		runTrigger = !runTrigger;
 	}
 
@@ -217,22 +217,39 @@ void Shooter::readXbox() {
 }
 
 void Shooter::readXboxState() {
-	if (xbox->getR3Pressed()) { //Up
+	if (xbox->getRightBumperPressed()) { //Up
 		angle = !angle;
 	}
 
-	if (xbox->getLeftBumperHeld()) {
+	if (xbox->getRightTriggerHeld()) {
 		runIntake = true;
+		intakePos = true;
 	} else {
 		runIntake = false;
+		intakePos = false;
+	}
+
+	if(xbox->getBackPressed()){
+		runIntake = !runIntake;
 	}
 
 	if (xbox->getXPressed()) {
 		intakeDirection = !intakeDirection;
 	}
 
+	if (xbox->getYPressed())
+	{
+		//TODO Daniel Reverse Motor Speeds
+	}
+
+
+
 	if (xbox->getL3Pressed()) {
 		intakePos = !intakePos;
+	}
+	if (xbox->getAPressed())
+	{
+		intakeDirection = !intakeDirection;
 	}
 
 	switch (sState) {
@@ -252,13 +269,13 @@ void Shooter::readXboxState() {
 				time = true;
 			}
 
-			if  (t->Get() > 5) { //(xbox->getRightTriggerPressed())
+			if  (xbox->getRightTriggerPressed()) { //(xbox->getRightTriggerPressed())
 				sState = goShoot;
 				time = false;
 				delete t;
 				t = NULL;
 			}
-			if (xbox->getRightBumperPressed()) {
+			if (xbox->getBPressed()) {
 				sState = winddown;
 				time = false;
 				delete t;
@@ -308,7 +325,7 @@ void Shooter::readXboxState() {
 		}
 	}
 
-	if (xbox->getYPressed()) {
+	if (xbox->getXPressed()) {
 		if (shootPercentState < 4) {
 			shootPercentState++;
 		} else {
