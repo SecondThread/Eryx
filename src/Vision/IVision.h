@@ -23,6 +23,9 @@ public:
 	 */
 	virtual bool getDoneAiming(){return false;}
 
+	/*
+	 * Returns true if startAiming has already been called, and then no target was successfully found.
+	 */
 	virtual bool getCrashed(){return false;}
 
 	/*

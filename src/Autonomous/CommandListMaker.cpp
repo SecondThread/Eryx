@@ -86,7 +86,11 @@ void CommandListMaker::makeBasic() {
 	storage->push_back(fin);
 }
 
-
+/** @input 	Defense to be broken
+ * 			Position that robot is placed on the field (1-5)
+ * 	@output Passes parameters needed to mount a defense
+ * 	Runs a desired case depending on the defense that will be broken
+ */
 void CommandListMaker::makeDefenceBreaker() {
 	int def = (int)autoDefence->GetSelected();
 	int pos = (int)autoPosition->GetSelected();

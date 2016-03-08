@@ -2,6 +2,7 @@
 #define VISION_H
 #include <Vision/IVision.h>
 
+//ALL COMMENTS ARE IN IVISION.H. LOOK THERE PLEASE.
 class Vision: public IVision {
 public:
 	void RobotInit();

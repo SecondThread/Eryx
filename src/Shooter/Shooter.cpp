@@ -22,19 +22,18 @@ Shooter::Shooter(Motor *motor, IXbox *xbox, IProfile *p) {
 	trigger = new DoubleSolenoid(2, 3); //2
 	intakeSol = new DoubleSolenoid(4, 5); //3
 
-	/*
-	 encFrontLeft = new Encoder(p->getInt("SHOOTERFL_ENC1"),
-	 p->getInt("SHOOTERFL_ENC2"));
-	 encFrontRight = new Encoder(p->getInt("SHOOTEFR_ENC1"),
-	 p->getInt("SHOOTERLR_ENC2"));
-	 encBackLeft = new Encoder(p->getInt("SHOOTERBL_ENC1"),
-	 p->getInt("SHOOTERBL_ENC2"));
-	 encBackRight = new Encoder(p->getInt("SHOOTERBR_ENC1"),
-	 p->getInt("SHOOTERBR_ENC2"));
-	 encFrontLeft->SetReverseDirection(p->getBool("SHOOTERFL_ENC1_INVERT")); //For test board
-	 encFrontRight->SetReverseDirection(p->getBool("SHOOTERFR_ENC1_INVERT")); //For test board
-	 encBackLeft->SetReverseDirection(p->getBool("SHOOTERBL_ENC1_INVERT")); //For test board
-	 encBackRight->SetReverseDirection(p->getBool("SHOOTERBR_ENC1_INVERT")); //For test board */
+	encFrontLeft = new Encoder(p->getInt("SHOOTERFL_ENC1"),
+			p->getInt("SHOOTERFL_ENC2"));
+	encFrontRight = new Encoder(p->getInt("SHOOTEFR_ENC1"),
+			p->getInt("SHOOTERLR_ENC2"));
+	encBackLeft = new Encoder(p->getInt("SHOOTERBL_ENC1"),
+			p->getInt("SHOOTERBL_ENC2"));
+	encBackRight = new Encoder(p->getInt("SHOOTERBR_ENC1"),
+			p->getInt("SHOOTERBR_ENC2"));
+	encFrontLeft->SetReverseDirection(p->getBool("SHOOTERFL_ENC1_INVERT")); //For test board
+	encFrontRight->SetReverseDirection(p->getBool("SHOOTERFR_ENC1_INVERT")); //For test board
+	encBackLeft->SetReverseDirection(p->getBool("SHOOTERBL_ENC1_INVERT")); //For test board
+	encBackRight->SetReverseDirection(p->getBool("SHOOTERBR_ENC1_INVERT")); //For test board
 
 	runShoot = false;
 	runIntake = false;
@@ -91,10 +90,10 @@ void Shooter::AutonomousPeriodic() {
 	setPnumatics();
 	motor->setShoot(leftSpeed, rightSpeed);
 
-	/*if (encFrontLeft->GetRate() > RPM) {
-	 runTrigger = true;
-	 shot = true;
-	 }*/
+	if (encFrontLeft->GetRate() > RPM) {
+		runTrigger = true;
+		shot = true;
+	}
 }
 
 void Shooter::shoot() {
@@ -163,23 +162,23 @@ void Shooter::TeleopPeriodic() {
 	motor->setIntake(intakeSpeed);
 
 	//if (Global::telemetry >= 1) { //Normal
-		SmartDashboard::PutNumber("Shoot Percent", shootPercent);
-		SmartDashboard::PutNumber("Intake Speed", intakeSpeed);
-		SmartDashboard::PutNumber("Shoot Left", leftSpeed);
-		SmartDashboard::PutNumber("Shoot Right", rightSpeed);
-		SmartDashboard::PutBoolean("Angle", angle);
-		SmartDashboard::PutBoolean("Trigger", trigger);
-		SmartDashboard::PutBoolean("Intake", intakePos);
+	SmartDashboard::PutNumber("Shoot Percent", shootPercent);
+	SmartDashboard::PutNumber("Intake Speed", intakeSpeed);
+	SmartDashboard::PutNumber("Shoot Left", leftSpeed);
+	SmartDashboard::PutNumber("Shoot Right", rightSpeed);
+	SmartDashboard::PutBoolean("Angle", angle);
+	SmartDashboard::PutBoolean("Trigger", trigger);
+	SmartDashboard::PutBoolean("Intake", intakePos);
 	/*} else if (Global::telemetry >= 2) { //debug
 
-	} else if (Global::telemetry >= 3) { //advanced debug
-		SmartDashboard::PutNumber("Shoot Percent State", shootPercentState);
-		if (intakeDirection) {
-			SmartDashboard::PutString("Intake Direction", "Forward");
-		} else {
-			SmartDashboard::PutString("Intake Direction", "Reverse");
-		}
-	}*/
+	 } else if (Global::telemetry >= 3) { //advanced debug
+	 SmartDashboard::PutNumber("Shoot Percent State", shootPercentState);
+	 if (intakeDirection) {
+	 SmartDashboard::PutString("Intake Direction", "Forward");
+	 } else {
+	 SmartDashboard::PutString("Intake Direction", "Reverse");
+	 }
+	 }*/
 
 	intakeSpeed = SmartDashboard::GetNumber("Intake Speed Change", -0.7);
 
@@ -252,7 +251,7 @@ void Shooter::readXboxState() {
 				time = true;
 			}
 
-			if  (t->Get() > 5) { //(xbox->getRightTriggerPressed())
+			if (t->Get() > 5) { //(xbox->getRightTriggerPressed())
 				sState = goShoot;
 				time = false;
 				delete t;
@@ -422,11 +421,11 @@ void Shooter::updateMotor2() {
 	}
 
 	if (runIntake) {
-		/*if (intakeDirection) {
-		 intakeSpeed = 1;
-		 } else {
-		 intakeSpeed = -1;
-		 }*/
+		if (intakeDirection) {
+			intakeSpeed = 1;
+		} else {
+			intakeSpeed = -1;
+		}
 	} else {
 		intakeSpeed = 0.0;
 	}
@@ -445,45 +444,47 @@ float Shooter::acceleration(float newS, float oldS) {
 	return newS;
 }
 
-/*void Shooter::updateMotor1() {
- double rateR = encFrontRight->GetRate();
- double rateL = encFrontLeft->GetRate();
+void Shooter::updateMotor1() {
+	double rateR = encFrontRight->GetRate();
+	double rateL = encFrontLeft->GetRate();
+	SmartDashboard::PutNumber("rateR", rateR);
+	SmartDashboard::PutNumber("rateL", rateL);
 
- if (runShoot) {
- //Logic to keep the wheels within 150 of the desired RPM
- //Left side
- if (rateL < RPM) {
- if (rateL < RPM - 150)
- leftSpeed += 0.01;
- else
- leftSpeed += 0.005;
+	if (runShoot) {
+		//Logic to keep the wheels within 150 of the desired RPM
+		//Left side
+		if (rateL < RPM) {
+			if (rateL < RPM - 150)
+				leftSpeed += 0.01;
+			else
+				leftSpeed += 0.005;
 
- } else if (rateL == RPM) {
- leftSpeed = 0.75;
- } else {
- if (rateL > RPM + 150)
- leftSpeed -= 0.01;
- else
- leftSpeed -= 0.005;
- }
+		} else if (rateL == RPM) {
+			leftSpeed = 0.75;
+		} else {
+			if (rateL > RPM + 150)
+				leftSpeed -= 0.01;
+			else
+				leftSpeed -= 0.005;
+		}
 
- //Right Side
- if (rateR < RPM) {
- if (rateR < RPM - 150)
- rightSpeed += 0.01;
- else
- rightSpeed += 0.005;
+		//Right Side
+		if (rateR < RPM) {
+			if (rateR < RPM - 150)
+				rightSpeed += 0.01;
+			else
+				rightSpeed += 0.005;
 
- } else if (rateR == RPM) {
- rightSpeed = 0.75;
- } else {
- if (rateR > RPM + 150)
- rightSpeed -= 0.01;
- else
- rightSpeed -= 0.005;
- }
- } else {
- leftSpeed = 0.0;
- rightSpeed = 0.0;
- }
- } */
+		} else if (rateR == RPM) {
+			rightSpeed = 0.75;
+		} else {
+			if (rateR > RPM + 150)
+				rightSpeed -= 0.01;
+			else
+				rightSpeed -= 0.005;
+		}
+	} else {
+		leftSpeed = 0.0;
+		rightSpeed = 0.0;
+	}
+}
