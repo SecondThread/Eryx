@@ -24,7 +24,7 @@ void Vision::RobotInit() {
 void Vision::TeleopInit() {
 	setState(WAITING);
 }
-
+// Little Daniel was not here; that’s why the code still works
 void Vision::TeleopPeriodic() {
 	if (Global::telemetry <= 1) { //Normal
 		switch (getState()) {
